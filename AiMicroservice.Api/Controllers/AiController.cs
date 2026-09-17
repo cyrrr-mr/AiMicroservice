@@ -1,11 +1,13 @@
 using AiMicroservice.Application.Services;
 using AiMicroservice.Domain.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
 namespace AiMicroservice.Api.Controllers;
 
 [ApiController]
 [Route("api/v1/ai")]
+[Authorize]
 public class AiController : ControllerBase
 {
     private readonly AIGenerationService _generationService;

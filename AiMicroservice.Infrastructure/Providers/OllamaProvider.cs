@@ -9,19 +9,21 @@ namespace AiMicroservice.Infrastructure.Providers;
 public class OllamaProvider : IAIProvider
 {
     private readonly HttpClient _httpClient;
+    private readonly IPromptService _promptService;
     private const string ModelName = "llama3.2";
 
-    public OllamaProvider(HttpClient httpClient)
+    public OllamaProvider(HttpClient httpClient, IPromptService promptService)
     {
         _httpClient = httpClient;
+        _promptService = promptService;
     }
 
     public async Task<AIResponse> GenerateAsync(AIRequest request)
     {
         var stopwatch = Stopwatch.StartNew();
 
-        // On concatène les messages en un seul prompt simple pour l'instant
-        var prompt = string.Join("\n", request.Messages.Select(m => $"{m.Role}: {m.Content}"));
+        // Le prompt est maintenant construit par le PromptService, pas ici.
+        var prompt = _promptService.BuildPrompt(request.Capability, request);
 
         var ollamaRequest = new OllamaRequest
         {
